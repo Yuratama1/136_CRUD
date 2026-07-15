@@ -18,11 +18,13 @@ const pool = new Pool({
     port: 5432,               
 });
 
+// membuat GET untuk mengambil semua data
 app.use(express.json());
 
 app.get('/', (req, res) => {
     console.log("Test DATA :");
-    pool.query('SELECT * FROM biodata')
+    // Menambahkan ORDER BY agar data selalu urut berdasarkan id
+    pool.query('SELECT * FROM biodata ORDER BY id ASC')
         .then(testData => {
             console.log(testData.rows);
             res.json(testData.rows);
@@ -30,7 +32,7 @@ app.get('/', (req, res) => {
         .catch(err => {
             console.error("Error executing query", err.stack);
             res.status(500).send("Database Error");
-        })
+        });
 });
 
 app.listen(port, () => {
